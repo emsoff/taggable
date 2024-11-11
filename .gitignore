@@ -1,0 +1,9 @@
+node_modules
+data.db
+package-lock.json
+index.js
+.DS_Store
+.npmignore
+eslint.config.mjs
+index.ts
+tsconfig.json
