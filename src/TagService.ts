@@ -153,7 +153,7 @@ export class Taggable {
         }
     }
 
-    async tagItem(tag_ids: number[], tagged: string, relationship: string = 'describes', tagger: string) {
+    async tagItem(tag_ids: number[], tagged: string, tagger: string,  relationship: string = 'describes') {
         try {
 
             tag_ids.map(async tag_id => {
