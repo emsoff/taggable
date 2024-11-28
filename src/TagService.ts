@@ -1,5 +1,6 @@
 import { Knex, knex } from 'knex';
 
+
 export interface TagResponse {
     name: string,
     tag: {
@@ -49,6 +50,7 @@ export interface TagItem {
     name: string,
     tagged: string,
     tagger: string,
+    relationship: 'relates_to' | 'is_child_of' | 'is_not_related_to' | 'is_distinct_from' | 'describes' | 'is_similar_to',
     tag_id: number
 }
 
@@ -306,7 +308,9 @@ export class Taggable {
 
     async createTables() {
         // Tags Table
-        await this.db.schema.createTableIfNotExists('tags', (table) => {
+        await this.db.schema
+        .dropTable('tags')
+        .createTable('tags', (table) => {
             table.increments('id').primary();
             table.string('name').notNullable();
             table.integer('parent');
@@ -317,7 +321,9 @@ export class Taggable {
         });
     
         // Tag Types Table
-        await this.db.schema.createTableIfNotExists('tag_types', (table) => {
+        await this.db.schema
+        .dropTable('tag_types')
+        .createTable('tag_types', (table) => {
             table.increments('id').primary();
             table.string('name').unique().notNullable();
             table.timestamps(true, true);
@@ -325,7 +331,9 @@ export class Taggable {
         });
     
         // Taggable Items Table
-        await this.db.schema.createTableIfNotExists('tag_contexts', (table) => {
+        await this.db.schema
+        .dropTable('tag_contexts')
+        .createTable('tag_contexts', (table) => {
             table.increments('id').primary();
             table.string('name').unique().notNullable(); // Item type (e.g., 'post', 'product')
             table.timestamps(true, true);
@@ -333,7 +341,9 @@ export class Taggable {
         });
     
         // Junction Table for Tags and Items
-        await this.db.schema.createTableIfNotExists('tag_items', (table) => {
+        await this.db.schema
+        .dropTable('tag_items')
+        .createTableIfNotExists('tag_items', (table) => {
             table.increments('id').primary();
             table.integer('tag_id').references('id').inTable('tags').onDelete('CASCADE');
             table.integer('tagged').notNullable()
