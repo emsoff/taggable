@@ -234,7 +234,9 @@ class Taggable {
     createTables() {
         return __awaiter(this, void 0, void 0, function* () {
             // Tags Table
-            yield this.db.schema.createTableIfNotExists('tags', (table) => {
+            yield this.db.schema
+                .dropTable('tags')
+                .createTable('tags', (table) => {
                 table.increments('id').primary();
                 table.string('name').notNullable();
                 table.integer('parent');
@@ -244,19 +246,25 @@ class Taggable {
                 table.timestamps(true, true);
             });
             // Tag Types Table
-            yield this.db.schema.createTableIfNotExists('tag_types', (table) => {
+            yield this.db.schema
+                .dropTable('tag_types')
+                .createTable('tag_types', (table) => {
                 table.increments('id').primary();
                 table.string('name').unique().notNullable();
                 table.timestamps(true, true);
             });
             // Taggable Items Table
-            yield this.db.schema.createTableIfNotExists('tag_contexts', (table) => {
+            yield this.db.schema
+                .dropTable('tag_contexts')
+                .createTable('tag_contexts', (table) => {
                 table.increments('id').primary();
                 table.string('name').unique().notNullable(); // Item type (e.g., 'post', 'product')
                 table.timestamps(true, true);
             });
             // Junction Table for Tags and Items
-            yield this.db.schema.createTableIfNotExists('tag_items', (table) => {
+            yield this.db.schema
+                .dropTable('tag_items')
+                .createTableIfNotExists('tag_items', (table) => {
                 table.increments('id').primary();
                 table.integer('tag_id').references('id').inTable('tags').onDelete('CASCADE');
                 table.integer('tagged').notNullable();

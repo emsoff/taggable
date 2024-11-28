@@ -153,12 +153,12 @@ export class Taggable {
         }
     }
 
-    async tagItem(tag_ids: number[], tagged: string, tagger: string) {
+    async tagItem(tag_ids: number[], tagged: string, relationship: string = 'describes', tagger: string) {
         try {
 
             tag_ids.map(async tag_id => {
                 await this.db('tag_items').insert(
-                    { tag_id, tagged, tagger } as TagItemInput
+                    { tag_id, tagged, tagger, relationship } as TagItemInput
                 ).catch((e) => { console.log(e) });
             })
         } catch (e) {

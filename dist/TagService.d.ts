@@ -45,6 +45,7 @@ export interface TagItem {
     name: string;
     tagged: string;
     tagger: string;
+    relationship: 'relates_to' | 'is_child_of' | 'is_not_related_to' | 'is_distinct_from' | 'describes' | 'is_similar_to';
     tag_id: number;
 }
 export interface TagItemInput {
