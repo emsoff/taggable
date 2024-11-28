@@ -1,6 +1,6 @@
 {
   "name" : "tag-everything",
-  "version" : "1.0.1",
+  "version" : "1.0.2",
   "dependencies": {
     "knex": "^3.1.0"
   },
