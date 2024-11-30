@@ -308,10 +308,8 @@ export class Taggable {
 
     async createTables() {
 
-        if (!await this.db.schema.hasTable('tags')) {
-            // Tags Table
+        try {
             await this.db.schema
-                .dropTable('tags')
                 .createTable('tags', (table) => {
                     table.increments('id').primary();
                     table.string('name').notNullable();
@@ -321,9 +319,11 @@ export class Taggable {
                     table.unique(['name', 'parent', 'type_id', 'context_id'])
                     table.timestamps(true, true);
                 });
+        } catch (e) {
+            console.log(`tags already exists`)
         }
-        if (!await this.db.schema.hasTable('tag_types')) {
 
+        try {
             // Tag Types Table
             await this.db.schema
                 .dropTable('tag_types')
@@ -333,9 +333,11 @@ export class Taggable {
                     table.timestamps(true, true);
 
                 });
+            } catch (e) {
+                console.log(`tag_types already exists`)
+            }
 
-        }
-        if (!await this.db.schema.hasTable('tag_contexts')) {
+            try {
 
             // Taggable Items Table
             await this.db.schema
@@ -346,9 +348,10 @@ export class Taggable {
                     table.timestamps(true, true);
 
                 });
-
-        }
-        if (!await this.db.schema.hasTable('tag_items')) {
+            } catch (e) {
+                console.log(`tag_contexts already exists`)
+            }
+            try {
 
             // Junction Table for Tags and Items
             await this.db.schema
@@ -362,6 +365,8 @@ export class Taggable {
                     table.timestamps(true, true);
 
                 });
-        }
+            } catch (e) {
+                console.log(`tag_items already exists`)
+            }
     }
 }

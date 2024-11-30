@@ -94,11 +94,11 @@ class Taggable {
             }
         });
     }
-    tagItem(tag_ids_1, tagged_1, tagger_1) {
-        return __awaiter(this, arguments, void 0, function* (tag_ids, tagged, tagger, relationship = 'describes') {
+    tagItem(tag_ids, tagged, tagger) {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 tag_ids.map((tag_id) => __awaiter(this, void 0, void 0, function* () {
-                    yield this.db('tag_items').insert({ tag_id, tagged, tagger, relationship }).catch((e) => { console.log(e); });
+                    yield this.db('tag_items').insert({ tag_id, tagged, tagger }).catch((e) => { console.log(e); });
                 }));
             }
             catch (e) {
@@ -233,45 +233,53 @@ class Taggable {
     }
     createTables() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Tags Table
-            yield this.db.schema
-                .dropTable('tags')
-                .createTable('tags', (table) => {
-                table.increments('id').primary();
-                table.string('name').notNullable();
-                table.integer('parent');
-                table.integer('type_id').notNullable();
-                table.integer('context_id').notNullable().references('id').inTable('tag_context').onDelete('CASCADE');
-                table.unique(['name', 'parent', 'type_id', 'context_id']);
-                table.timestamps(true, true);
-            });
-            // Tag Types Table
-            yield this.db.schema
-                .dropTable('tag_types')
-                .createTable('tag_types', (table) => {
-                table.increments('id').primary();
-                table.string('name').unique().notNullable();
-                table.timestamps(true, true);
-            });
-            // Taggable Items Table
-            yield this.db.schema
-                .dropTable('tag_contexts')
-                .createTable('tag_contexts', (table) => {
-                table.increments('id').primary();
-                table.string('name').unique().notNullable(); // Item type (e.g., 'post', 'product')
-                table.timestamps(true, true);
-            });
-            // Junction Table for Tags and Items
-            yield this.db.schema
-                .dropTable('tag_items')
-                .createTableIfNotExists('tag_items', (table) => {
-                table.increments('id').primary();
-                table.integer('tag_id').references('id').inTable('tags').onDelete('CASCADE');
-                table.integer('tagged').notNullable();
-                table.integer('tagger');
-                table.unique(['tag_id', 'tagged', 'tagger']);
-                table.timestamps(true, true);
-            });
+            if (!(yield this.db.schema.hasTable('tags'))) {
+                // Tags Table
+                yield this.db.schema
+                    .dropTable('tags')
+                    .createTable('tags', (table) => {
+                    table.increments('id').primary();
+                    table.string('name').notNullable();
+                    table.integer('parent');
+                    table.integer('type_id').notNullable();
+                    table.integer('context_id').notNullable().references('id').inTable('tag_context').onDelete('CASCADE');
+                    table.unique(['name', 'parent', 'type_id', 'context_id']);
+                    table.timestamps(true, true);
+                });
+            }
+            if (!(yield this.db.schema.hasTable('tag_types'))) {
+                // Tag Types Table
+                yield this.db.schema
+                    .dropTable('tag_types')
+                    .createTable('tag_types', (table) => {
+                    table.increments('id').primary();
+                    table.string('name').unique().notNullable();
+                    table.timestamps(true, true);
+                });
+            }
+            if (!(yield this.db.schema.hasTable('tag_contexts'))) {
+                // Taggable Items Table
+                yield this.db.schema
+                    .dropTable('tag_contexts')
+                    .createTable('tag_contexts', (table) => {
+                    table.increments('id').primary();
+                    table.string('name').unique().notNullable(); // Item type (e.g., 'post', 'product')
+                    table.timestamps(true, true);
+                });
+            }
+            if (!(yield this.db.schema.hasTable('tag_items'))) {
+                // Junction Table for Tags and Items
+                yield this.db.schema
+                    .dropTable('tag_items')
+                    .createTableIfNotExists('tag_items', (table) => {
+                    table.increments('id').primary();
+                    table.integer('tag_id').references('id').inTable('tags').onDelete('CASCADE');
+                    table.integer('tagged').notNullable();
+                    table.integer('tagger');
+                    table.unique(['tag_id', 'tagged', 'tagger']);
+                    table.timestamps(true, true);
+                });
+            }
         });
     }
 }
