@@ -74,7 +74,7 @@ export declare class Taggable {
     getAllTags(): Promise<false | any[]>;
     getAllContexts(): Promise<false | any[]>;
     getAllTagItems(): Promise<false | any[]>;
-    tagItem(tag_ids: number[], tagged: string, relationship: string | undefined, tagger: string): Promise<false | undefined>;
+    tagItem(tag_ids: number[], tagged: string, tagger: string, relationship?: string): Promise<false | undefined>;
     untag(tag_ids: number[], tagged: string): Promise<false | undefined>;
     getTaggedItems(where?: Where): Promise<false | any[]>;
     tag(tag: number, tagged: string, tagger: string): Promise<false | undefined>;

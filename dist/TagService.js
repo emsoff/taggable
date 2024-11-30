@@ -94,8 +94,8 @@ class Taggable {
             }
         });
     }
-    tagItem(tag_ids_1, tagged_1) {
-        return __awaiter(this, arguments, void 0, function* (tag_ids, tagged, relationship = 'describes', tagger) {
+    tagItem(tag_ids_1, tagged_1, tagger_1) {
+        return __awaiter(this, arguments, void 0, function* (tag_ids, tagged, tagger, relationship = 'describes') {
             try {
                 tag_ids.map((tag_id) => __awaiter(this, void 0, void 0, function* () {
                     yield this.db('tag_items').insert({ tag_id, tagged, tagger, relationship }).catch((e) => { console.log(e); });
